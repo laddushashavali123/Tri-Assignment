@@ -23,7 +23,6 @@ public class SearchContactDestinationSubsribeSteps {
     private Subscribe subscribe;
     private Contact contact;
     private Destination destination;
-    private HomepageTrivago homepageTrivago;
 
     @Before
     public void beforeScenario(Scenario scenario) {
@@ -35,7 +34,7 @@ public class SearchContactDestinationSubsribeSteps {
         contact = new Contact(driver);
         subscribe = new Subscribe(driver);
         destination = new Destination(driver);
-        homepageTrivago=new HomepageTrivago(driver);
+
         if (!scenario.getName().equals("")) {
             Reporter.assignAuthor("Laddu shashavali");
             Reporter.addScenarioLog("Scenario: " + scenario.getName());
@@ -43,21 +42,21 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Given("^Contact is visible$")
-    public void contact_is_visible() throws Exception {
+    public void contact_is_visible() throws IOException {
         Reporter.addStepLog("Contact Link in the application");
         contact.contactVisible();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ContactVisible</a>");
     }
 
     @When("^I click Contact$")
-    public void i_click_contact_page() throws Exception {
+    public void i_click_contact_page() throws IOException {
         Reporter.addStepLog("Click Contact Link in the application");
         contact.clickContact();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickContact</a>");
     }
 
     @When("^I enter (.+),(.+),(.+) data$")
-    public void i_enter_and_data(String textarea, String fullname, String email) throws Exception {
+    public void i_enter_and_data(String textarea, String fullname, String email) throws IOException {
         Reporter.addStepLog("Enter Fields in Contact Form in the application");
         contact.enterDataContactDetails(textarea, fullname, email);
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>EnterFields</a>");
@@ -65,14 +64,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Then("^I see the appropriate fields$")
-    public void i_see_the_appropriate_fields_contact() throws Exception {
+    public void i_see_the_appropriate_fields_contact() throws IOException {
         Reporter.addStepLog("Verify Fields in Contact Form in the application");
         contact.verifyFields();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>VerifyFields</a>");
     }
 
     @Then("^I see the success message (.+)$")
-    public void i_see_the_success_message(String message) throws Exception {
+    public void i_see_the_success_message(String message) throws IOException {
         Reporter.addStepLog("Success message in the application");
         if (contact.verifyMessage(message)) {
             Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SuccessMessage</a>");
@@ -82,34 +81,34 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @And("^I check the Confirm checkbox$")
-    public void i_check_the_confirm_checkbox() throws Exception {
+    public void i_check_the_confirm_checkbox() throws IOException {
         Reporter.addStepLog("Click cpnfirm button in the application");
         contact.clickConfirm();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickConfirm</a>");
     }
 
     @And("^I click Submit button$")
-    public void i_click_submit_button() throws Exception {
+    public void i_click_submit_button() throws IOException {
         Reporter.addStepLog("Click submit button in the application");
         contact.clickSubmit();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubmit</a>");
     }
     @Given("^topleftIcon is visible$")
-    public void toplefticon_is_visible() throws Exception {
+    public void toplefticon_is_visible() throws IOException {
         Reporter.addStepLog("Top left Icon in the application");
         destination.topLeftIconVisible();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TopleftIcon</a>");
     }
 
     @When("^I click topleftIcon$")
-    public void i_click_toplefticon() throws Exception {
+    public void i_click_toplefticon() throws IOException {
         Reporter.addStepLog("Click Topleft Icon in the application");
         destination.clickIcon();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickIcon</a>");
     }
 
     @When("^I click DestinationMenu item$")
-    public void i_click_destinationmenu_item() throws Exception {
+    public void i_click_destinationmenu_item() throws IOException {
         Reporter.addStepLog("Destination Menu Item is clicked in the application");
         destination.clickDestinationMenu();
         destination.clickMenuItem();
@@ -117,28 +116,28 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @When("^I see DestinationSubMenu item$")
-    public void i_see_destinationsubmenu_item() throws Exception {
+    public void i_see_destinationsubmenu_item() throws IOException {
         Reporter.addStepLog("Destination SubMenu Item is visible in the application");
         destination.viewSubMenuItem();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubMenuItem</a>");
     }
 
     @When("^I click DestinationSubMenu item$")
-    public void i_click_destinationsubmenu_item() throws Exception {
+    public void i_click_destinationsubmenu_item() throws IOException {
         Reporter.addStepLog("Destination SubMenu Item is clicked in the application");
         destination.clickSubMenuItem();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubMenuItem</a>");
     }
 
     @Then("^I see Destination menu$")
-    public void i_see_destination_menu() throws Exception {
+    public void i_see_destination_menu() throws IOException {
         Reporter.addStepLog("Destination Menu in the application");
         destination.verifyMenu();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>VerifyMenu</a>");
     }
 
     @Then("^I see destination results$")
-    public void i_see_destination_results_destination() throws Exception {
+    public void i_see_destination_results_destination() throws IOException {
         Reporter.addStepLog("Destination results in the application");
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>DestinationResults</a>");
         destination.seeResults();
@@ -146,14 +145,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @And("^I verify destination results$")
-    public void i_verify_destination_results() throws Exception {
+    public void i_verify_destination_results() throws IOException {
         Reporter.addStepLog("Validate Destination results in the application");
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ValidateDestinationResults</a>");
         destination.validateResults();
         Reporter.addScreenCaptureFromPath(captureScreen(driver), "ValidateDestinationResults");
     }
     @Given("^Subscribe is visible$")
-    public void subscribe_is_visible() throws Exception {
+    public void subscribe_is_visible() throws IOException {
         Reporter.addStepLog("Subscribe is visible in the application");
         subscribe.fieldsVisible();
         Reporter.addScreenCaptureFromPath(captureScreen(driver), "SubscribeVisible");
@@ -161,28 +160,28 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @When("^I see the appropriate fields in subscribe$")
-    public void i_see_the_appropriate_fields_in_subscribe() throws Exception {
+    public void i_see_the_appropriate_fields_in_subscribe() throws IOException {
         Reporter.addStepLog("Appropriate fields are visible in the application");
         subscribe.fieldsVisible();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>FieldSubscribe</a>");
     }
 
     @When("^I click Submit button in Subscribe$")
-    public void i_click_submit_button_subscribe() throws Exception {
+    public void i_click_submit_button_subscribe() throws IOException {
         Reporter.addStepLog("Click submit button in the application");
         subscribe.clickSubmit();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubmit</a>");
     }
 
     @And("^I click Confirm$")
-    public void i_click_confirm_subscribe() throws Exception {
+    public void i_click_confirm_subscribe() throws IOException {
         Reporter.addStepLog("Subscribe is visible in the application");
         subscribe.clickConfirm();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SubscribeVisible</a>");
     }
 
     @Then("^I verify success message (.+) in Subscribe$")
-    public void i_see_the_success_message_subscribe(String message) throws Exception {
+    public void i_see_the_success_message_subscribe(String message) throws IOException {
         Reporter.addStepLog("See the success message in the application");
         if (subscribe.verifyMessage(message)) {
             Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SuccessMessage</a>");
@@ -192,14 +191,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Then("^I enter email (.+) data$")
-    public void i_enter_data(String email) throws Exception {
+    public void i_enter_data(String email) throws IOException {
         Reporter.addStepLog("Eneter email in the application");
         subscribe.enteremail(email);
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>Enteremail</a>");
     }
 
     @Given("^Search button is visible$")
-    public void search_button_Visible() throws Exception {
+    public void search_button_Visible() throws IOException {
         Reporter.addStepLog("Search Icon or button is Visible");
         homePage.searchEnabled();
         Reporter.addScreenCaptureFromPath(captureScreen(driver), "SearchIcon");
@@ -207,114 +206,36 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @When("^I see search icon enabled$")
-    public void searchButtonEnabled() throws Exception {
+    public void searchButtonEnabled() throws IOException {
         Reporter.addStepLog("Click on Search icon");
         homePage.clickSearchIcon();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSearchIcon</a>");
     }
 
     @Then("^I enter (.+) in the search field$")
-    public void enterDataSearch(String data) throws Exception {
+    public void enterDataSearch(String data) throws IOException {
         Reporter.addStepLog("Enter data to search");
         homePage.enterDataSearch(data);
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>EnterData</a>");
     }
 
     @When("^I click on search$")
-    public void searchClick() throws Exception {
+    public void searchClick() throws IOException {
         Reporter.addStepLog("Click on Search button to see the results");
         homePage.clickSearch();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSearchButton</a>");
     }
 
     @Then("^I see the search results$")
-    public void searchResults() throws Exception {
+    public void searchResults() throws IOException {
         Reporter.addStepLog("Validating the results in the application");
         homePage.validateResults();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SearchResults</a>");
     }
-    //Navigate to trivago portal
-    @When("^I click on searchresult (.+)$")
-    public void i_click_on_searchresult(String searchoption) throws Exception {
-        //Click searchResultoption
-        destination.clickSearchResult(searchoption);
-        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSearchResult</a>");
-    }
-
-    @When("^I click see it on trivago$")
-    public void i_click_see_it_on_trivago() throws Exception {
-       //Click seeItOnTrivago link
-        destination.clickSeeitOnTrivago();
-        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSeeitonTrivago</a>");
-
-    }
-
-    @Then("^I navigate to details page$")
-    public void i_navigate_to_details_page() throws Exception {
-       //Navigate to details page
-        destination.detailsPage();
-        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>DetailsPage</a>");
-
-    }
-
-    @Then("^I navigate to trivagoSearch page$")
-    public void i_navigate_to_trivagosearch_page() throws Exception {
-         //Navigate to trivago search page
-        destination.navigateTrivagoSearchPage();
-    }
-
-    @And("^I see recommendations$")
-    public void i_see_recommendations() throws Exception {
-        //Verify the recommendations
-        destination.verifyRecommendations();
-    }
-   //Navigate Trivago page
-
-    @Given("^Trivago is visible$")
-    public void trivago_is_visible() throws Exception {
-        Reporter.addStepLog("Trivago link is visible in the application");
-        homepageTrivago.trivagoVisible();
-        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TrivagoLink</a>");
-    }
-
-    @When("^I click Trivago$")
-    public void i_click_trivago() throws Exception {
-        Reporter.addStepLog("Click Trivago link in the application");
-        homepageTrivago.clickTrivago();
-    }
-
-    @When("^I enter (.+) data in searchPage$")
-    public void i_enter_data_in_searchpage(String datasearch) throws Exception {
-        Reporter.addStepLog("Enter data in the application");
-        homepageTrivago.enterData(datasearch);
-    }
-
-    @Then("^I see the appropriate fields in Trivago searchPage$")
-    public void i_see_the_appropriate_fields_in_trivago_searchpage() throws Exception {
-        Reporter.addStepLog("Verify fields in the application");
-        homepageTrivago.verifyFields();
-    }
-
-    @Then("^I see the searchResults in Trivago$")
-    public void i_see_the_searchresults_in_trivago() throws Exception {
-        Reporter.addStepLog("Search results is visible in the application");
-        homepageTrivago.navigateTrivagoSearchPage();
-    }
-
-    @And("^I click Search button in searchPage$")
-    public void i_click_search_button_in_searchpage() throws Exception {
-        Reporter.addStepLog("Click search button in the application");
-        homepageTrivago.clickSearch();
-    }
-
-    @And("^I verify the searchResults in trivago$")
-    public void i_verifysearchResults_searchpage() throws Exception {
-        Reporter.addStepLog("Validate search results in the application");
-        homepageTrivago.verifyRecommendations();
-    }
 
     @After
-    public void afterScenario(Scenario scenario) throws Exception{
+    public void afterScenario(Scenario scenario) {
+        try {
             if (scenario.isFailed()) {
                 Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TestFail</a>");
                 byte[] screenshotFail = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
@@ -325,6 +246,8 @@ public class SearchContactDestinationSubsribeSteps {
             }
             //Quit all Instances
             driver.quit();
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
