@@ -137,7 +137,7 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Then("^I see destination results$")
-    public void i_see_destination_results_destination() throws IOException {
+    public void i_see_destination_results_destination() throws Exception {
         Reporter.addStepLog("Destination results in the application");
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>DestinationResults</a>");
         destination.seeResults();
@@ -145,14 +145,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @And("^I verify destination results$")
-    public void i_verify_destination_results() throws IOException {
+    public void i_verify_destination_results() throws Exception {
         Reporter.addStepLog("Validate Destination results in the application");
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ValidateDestinationResults</a>");
         destination.validateResults();
         Reporter.addScreenCaptureFromPath(captureScreen(driver), "ValidateDestinationResults");
     }
     @Given("^Subscribe is visible$")
-    public void subscribe_is_visible() throws IOException {
+    public void subscribe_is_visible() throws Exception {
         Reporter.addStepLog("Subscribe is visible in the application");
         subscribe.fieldsVisible();
         Reporter.addScreenCaptureFromPath(captureScreen(driver), "SubscribeVisible");
@@ -160,28 +160,28 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @When("^I see the appropriate fields in subscribe$")
-    public void i_see_the_appropriate_fields_in_subscribe() throws IOException {
+    public void i_see_the_appropriate_fields_in_subscribe() throws Exception {
         Reporter.addStepLog("Appropriate fields are visible in the application");
         subscribe.fieldsVisible();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>FieldSubscribe</a>");
     }
 
     @When("^I click Submit button in Subscribe$")
-    public void i_click_submit_button_subscribe() throws IOException {
+    public void i_click_submit_button_subscribe() throws Exception {
         Reporter.addStepLog("Click submit button in the application");
         subscribe.clickSubmit();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubmit</a>");
     }
 
     @And("^I click Confirm$")
-    public void i_click_confirm_subscribe() throws IOException {
+    public void i_click_confirm_subscribe() throws Exception {
         Reporter.addStepLog("Subscribe is visible in the application");
         subscribe.clickConfirm();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SubscribeVisible</a>");
     }
 
     @Then("^I verify success message (.+) in Subscribe$")
-    public void i_see_the_success_message_subscribe(String message) throws IOException {
+    public void i_see_the_success_message_subscribe(String message) throws Exception {
         Reporter.addStepLog("See the success message in the application");
         if (subscribe.verifyMessage(message)) {
             Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SuccessMessage</a>");
@@ -191,14 +191,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Then("^I enter email (.+) data$")
-    public void i_enter_data(String email) throws IOException {
+    public void i_enter_data(String email) throws Exception {
         Reporter.addStepLog("Eneter email in the application");
         subscribe.enteremail(email);
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>Enteremail</a>");
     }
 
     @Given("^Search button is visible$")
-    public void search_button_Visible() throws IOException {
+    public void search_button_Visible() throws Exception {
         Reporter.addStepLog("Search Icon or button is Visible");
         homePage.searchEnabled();
         Reporter.addScreenCaptureFromPath(captureScreen(driver), "SearchIcon");
@@ -206,28 +206,28 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @When("^I see search icon enabled$")
-    public void searchButtonEnabled() throws IOException {
+    public void searchButtonEnabled() throws Exception {
         Reporter.addStepLog("Click on Search icon");
         homePage.clickSearchIcon();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSearchIcon</a>");
     }
 
     @Then("^I enter (.+) in the search field$")
-    public void enterDataSearch(String data) throws IOException {
+    public void enterDataSearch(String data) throws Exception {
         Reporter.addStepLog("Enter data to search");
         homePage.enterDataSearch(data);
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>EnterData</a>");
     }
 
     @When("^I click on search$")
-    public void searchClick() throws IOException {
+    public void searchClick() throws Exception {
         Reporter.addStepLog("Click on Search button to see the results");
         homePage.clickSearch();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSearchButton</a>");
     }
 
     @Then("^I see the search results$")
-    public void searchResults() throws IOException {
+    public void searchResults() throws Exception {
         Reporter.addStepLog("Validating the results in the application");
         homePage.validateResults();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SearchResults</a>");
