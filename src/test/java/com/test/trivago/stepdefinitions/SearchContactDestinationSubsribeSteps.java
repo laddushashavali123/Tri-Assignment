@@ -42,21 +42,21 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Given("^Contact is visible$")
-    public void contact_is_visible() throws IOException {
+    public void contact_is_visible() throws Exception {
         Reporter.addStepLog("Contact Link in the application");
         contact.contactVisible();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ContactVisible</a>");
     }
 
     @When("^I click Contact$")
-    public void i_click_contact_page() throws IOException {
+    public void i_click_contact_page() throws Exception {
         Reporter.addStepLog("Click Contact Link in the application");
         contact.clickContact();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickContact</a>");
     }
 
     @When("^I enter (.+),(.+),(.+) data$")
-    public void i_enter_and_data(String textarea, String fullname, String email) throws IOException {
+    public void i_enter_and_data(String textarea, String fullname, String email) throws Exception {
         Reporter.addStepLog("Enter Fields in Contact Form in the application");
         contact.enterDataContactDetails(textarea, fullname, email);
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>EnterFields</a>");
@@ -64,14 +64,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @Then("^I see the appropriate fields$")
-    public void i_see_the_appropriate_fields_contact() throws IOException {
+    public void i_see_the_appropriate_fields_contact() throws Exception {
         Reporter.addStepLog("Verify Fields in Contact Form in the application");
         contact.verifyFields();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>VerifyFields</a>");
     }
 
     @Then("^I see the success message (.+)$")
-    public void i_see_the_success_message(String message) throws IOException {
+    public void i_see_the_success_message(String message) throws Exception {
         Reporter.addStepLog("Success message in the application");
         if (contact.verifyMessage(message)) {
             Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SuccessMessage</a>");
@@ -81,14 +81,14 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @And("^I check the Confirm checkbox$")
-    public void i_check_the_confirm_checkbox() throws IOException {
+    public void i_check_the_confirm_checkbox() throws Exception {
         Reporter.addStepLog("Click cpnfirm button in the application");
         contact.clickConfirm();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickConfirm</a>");
     }
 
     @And("^I click Submit button$")
-    public void i_click_submit_button() throws IOException {
+    public void i_click_submit_button() throws Exception {
         Reporter.addStepLog("Click submit button in the application");
         contact.clickSubmit();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubmit</a>");
