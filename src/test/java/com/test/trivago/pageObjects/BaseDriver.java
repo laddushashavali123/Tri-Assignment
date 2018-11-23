@@ -15,17 +15,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.internal.Nullable;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -53,7 +49,7 @@ public class BaseDriver {
             opt.addArguments("disable-extensions");
             opt.addArguments("--start-maximized");
             DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+            capabilities.setCapability (CapabilityType.ACCEPT_SSL_CERTS, true);
             capabilities.setCapability(ChromeOptions.CAPABILITY, opt);
             driver = new ChromeDriver(capabilities);
             driver.manage().deleteAllCookies();
@@ -74,9 +70,10 @@ public class BaseDriver {
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            /* driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);*/
+           /* driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);*/
             return driver;
-        } else
+        }
+            else
             return null;
     }
 
@@ -89,12 +86,6 @@ public class BaseDriver {
      * Browser properties initialization
      */
     private static void initProperties() {
-        /*WebDriverManager.chromedriver().setup();
-        WebDriverManager.firefoxdriver().setup();
-        WebDriverManager.operadriver().setup();
-        WebDriverManager.phantomjs().setup();
-        WebDriverManager.edgedriver().setup();
-        WebDriverManager.iedriver().setup();*/
         try {
             props.load(new FileReader(PROPERTIES));
         } catch (IOException ex) {
@@ -102,13 +93,10 @@ public class BaseDriver {
         }
         if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("chrome".toUpperCase().trim())) {
             // using testProperties.properties
-
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
-        } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
-
+        }else
+        if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
             // using testProperties.properties
-            webdrivermanager.setup();
-
             System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\drivers\\geckodriver.exe");
         }
     }
@@ -128,6 +116,7 @@ public class BaseDriver {
                 .withTimeout(10, SECONDS)
                 .pollingEvery(5, SECONDS)
                 .ignoring(Exception.class);
+
     }
 
     //implicit wait
@@ -136,44 +125,19 @@ public class BaseDriver {
     }
 
     //Explicit wait
-    public static WebElement explicitWait(WebDriver driver, WebElement webElement) {
-        new WebDriverWait(driver, 10)
-                .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.refreshed(
-                ExpectedConditions.visibilityOf(webElement)));
+    public static WebElement explicitWait(WebDriver webDriver, WebElement webElement) {
+        WebDriverWait wait = new WebDriverWait(webDriver, 10);
+
+        webElement = wait.until(ExpectedConditions.visibilityOf(webElement));
         return webElement;
     }
 
-    //StaleElement Click
-    public static boolean retryingFindWebElement(WebDriver driver,WebElement webElement) throws Exception{
-        boolean result = false;
-        int attempts = 0;
-        while(attempts < 4) {
-            try {
-                explicitWait(driver,webElement);
-                webElement.isDisplayed();
-                result = true;
-                break;
-            } catch(Exception e) {
-            }
-            attempts++;
-        }
-        return result;
-    }
     //Explicit wait
-    public static WebElement explicitWaitClickable(WebDriver driver, WebElement webElement) {
-        new WebDriverWait(driver, 10)
-                .ignoring(StaleElementReferenceException.class).
-                until(ExpectedConditions.refreshed(
-                        ExpectedConditions.elementToBeClickable(webElement)));
-        return webElement;
-    }
+    public static WebElement explicitWaitClickable(WebDriver webDriver, WebElement webElement) {
+        WebDriverWait wait = new WebDriverWait(webDriver, 10);
 
-    public static void clickTab(WebDriver driver, WebElement element) {
-        Actions action = new Actions(driver);
-        action.contextClick(element)
-                .sendKeys(Keys.TAB).build()
-                .perform();
+        webElement = wait.until(ExpectedConditions.elementToBeClickable(webElement));
+        return webElement;
     }
 
     //Scroll into view
@@ -183,34 +147,16 @@ public class BaseDriver {
         hightlightElement(webdriver, webElement);
     }
 
-    public static List<String> getBoundedRectangleOfElement(WebElement we) throws Exception {
-        JavascriptExecutor je = (JavascriptExecutor) driver;
-        List<String> bounds = (ArrayList<String>) je.executeScript(
-                "var rect = arguments[0].getBoundingClientRect();" +
-                        "return [ '' + parseInt(rect.left), '' + parseInt(rect.top), '' + parseInt(rect.width), '' + parseInt(rect.height) ]", we);
-        System.out.println("top: " + bounds.get(1));
-        return bounds;
-    }
-
-    public static void mouseHoverJScript(WebDriver driver, WebElement HoverElement) throws Exception {
-        String mouseOverScript = "if(document.createEvent){var evObj = document.createEvent('MouseEvents');evObj.initEvent('mouseover', true, false); arguments[0].dispatchEvent(evObj);} else if(document.createEventObject) { arguments[0].fireEvent('onmouseover');}";
-        ((JavascriptExecutor) driver).executeScript(mouseOverScript, HoverElement);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", HoverElement);
-        hightlightElement(driver, HoverElement);
-    }
-
     //Scroll into view
     public static void scrollintoviewAndClickElement(WebDriver webdriver, WebElement webElement) throws Exception {
         ((JavascriptExecutor) webdriver).executeScript("arguments[0].scrollIntoView(true);", webElement);
         Thread.sleep(500);
         //Highlight Element
         hightlightElement(webdriver, webElement);
-
         //Click on Element
         ((JavascriptExecutor) webdriver).executeScript("arguments[0].click();", webElement);
-        implicitWait(webdriver);
+        implicitWait(driver);
     }
-
     //Highlight element
     public static void hightlightElement(WebDriver webdriver, WebElement webElement) throws InterruptedException {
         // draw a border around the found element
@@ -225,6 +171,7 @@ public class BaseDriver {
 
     //Scroll to bottom of the page
     public static void scrollToBottom(WebDriver webDriver) {
+
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
         js.executeScript("window.scrollTo(0, Math.max(document.documentElement.scrollHeight, document.body.scrollHeight, document.documentElement.clientHeight));");
     }
@@ -241,128 +188,35 @@ public class BaseDriver {
         }
         return path;
     }
-
-    public static boolean waitStale(WebDriver driver, WebElement webElement) {
-        new WebDriverWait(driver, 10).ignoring(StaleElementReferenceException.class).until(ExpectedConditions.elementToBeClickable(webElement));
-        return webElement.isDisplayed();
-    }
-
-    public static boolean scroll_Page(WebElement webelement, int scrollPoints) {
-        try {
+    public static boolean scroll_Page(WebElement webelement, int scrollPoints)
+    {
+        try
+        {
             Actions dragger = new Actions(driver);
             // drag downwards
             int numberOfPixelsToDragTheScrollbarDown = 10;
-            for (int i = 10; i < scrollPoints; i = i + numberOfPixelsToDragTheScrollbarDown) {
+            for (int i = 10; i < scrollPoints; i = i + numberOfPixelsToDragTheScrollbarDown)
+            {
                 dragger.moveToElement(webelement).clickAndHold().moveByOffset(0, numberOfPixelsToDragTheScrollbarDown).release(webelement).build().perform();
             }
             Thread.sleep(500);
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             return false;
         }
     }
 
-    public static void switchWindow(WebDriver driver) {
+    public static void switchWindow(WebDriver driver){
         //Switch to new window
-        Set<String> handles = driver.getWindowHandles();
+        Set<String> handles= driver.getWindowHandles();
         System.out.println(handles);
         // Pass a window handle to the other window
         for (String handle : driver.getWindowHandles()) {
             System.out.println(handle);
             driver.switchTo().window(handle);
-        }
-    }
-
-    public static boolean switchWindow(WebDriver driver, String title) throws Exception {
-
-        String currentWindow = driver.getWindowHandle();
-        Set<String> availableWindows = driver.getWindowHandles();
-        if (!availableWindows.isEmpty()) {
-            for (String windowId : availableWindows) {
-                if (driver.switchTo().window(windowId).getTitle().equals(title)) {
-                    return true;
-                } else {
-                    driver.switchTo().window(currentWindow);
-                }
-            }
-        }
-
-        return false;
-    }
-
-    //Element is present
-    public static boolean isElementPresent(WebElement element) {
-        try {
-            return element.isDisplayed();
-        } catch (org.openqa.selenium.NoSuchElementException e) {
-            return false;
-        }
-    }
-    //Element is present
-    public static boolean isElementPresentEnabled(WebDriver driver,String element) {
-        try {
-            return driver.findElement(By.xpath(element)).isDisplayed() && driver.findElement(By.xpath(element)).isEnabled();
-        } catch (org.openqa.selenium.NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    //Scroll to Top of the page
-    public static boolean scrollUpElement(WebDriver driver, WebElement element) throws Exception {
-        boolean flag = false;
-        for (int second = 0; ; second++) {
-            if (second >= 5) {
-                break;
-            }
-            if (!isElementPresent(element))
-                ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-400)", "");
-            else {
-                flag = true;
-            }
-            Thread.sleep(2000);
-        }
-        return flag;
-    }
-
-    //Scroll to Down of the page
-    public static boolean scrollDownElement(WebDriver driver, WebElement element) throws Exception {
-        boolean flag = false;
-        for (int second = 0; ; second++) {
-            if (second >= 5) {
-                break;
-            }
-            if (!isElementPresent(element))
-                ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,100)", "");
-            else {
-                flag = true;
-            }
-            Thread.sleep(2000);
-        }
-        return flag;
-    }
-
-    public static void clickKey(Keys keys) {
-        Actions action = new Actions(driver);
-        action.sendKeys(keys).build().perform();
-    }
-
-    public static void pagination_check(List<WebElement> pagination) throws InterruptedException {
-        String page = "//*[@class='pagination__pages']//*[@class='btn btn--pagination btn--small pagination__page pagination__page--first-cluster']";
-        implicitWait(driver);    //wait until 'loader'  loading
-        Thread.sleep(5000);
-        if (pagination.size() > 0) {
-            System.out.println("pagination exists and size=>" + pagination.size());
-            int page_no = pagination.size();
-            for (int i = 2; i <= pagination.size(); i++) {
-                JavascriptExecutor js = (JavascriptExecutor) driver;
-                js.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.xpath(page)));
-                //for  scroller move
-                js.executeScript("arguments[0].click();", driver.findElement(By.xpath("(//*[@class='pagination__pages']//*[@class='btn btn--pagination btn--small pagination__page pagination__page--first-cluster'])[" + i + "]")));
-                implicitWait(driver);      //wait
-            }
-        } else {
-            System.out.println("no pagination");
         }
     }
 }

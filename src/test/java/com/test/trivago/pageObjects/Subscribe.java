@@ -35,9 +35,7 @@ public class Subscribe {
     }
 
     public void fieldsVisible() throws Exception {
-        Thread.sleep(1000);
         scrollintoviewElement(driver, confirm);
-        Thread.sleep(1000);
         scrollintoviewElement(driver, email);
         Assert.assertTrue((confirm.isDisplayed() && confirm.isEnabled())
                         && (email.isDisplayed() && email.isEnabled()),
@@ -46,7 +44,6 @@ public class Subscribe {
 
     public void clickConfirm() throws Exception {
         //Click confirm
-        Thread.sleep(2000);
         scrollintoviewAndClickElement(driver,confirm);
     }
 
@@ -60,7 +57,6 @@ public class Subscribe {
     //Click submit
     public void clickSubmit() throws Exception {
         //Cick submit
-        Thread.sleep(2000);
         scrollintoviewAndClickElement(driver, submit);
     }
 
@@ -68,7 +64,6 @@ public class Subscribe {
     public Boolean verifyMessage(String message) throws Exception {
         JavascriptExecutor executor = (JavascriptExecutor) driver;
         executor.executeScript("window.scrollBy(0,-700)", "");
-        Thread.sleep(1000);
         scrollintoviewElement(driver, feedbackMsg);
         return feedbackMsg.getText().toUpperCase().trim().equals(message.toUpperCase().trim());
     }

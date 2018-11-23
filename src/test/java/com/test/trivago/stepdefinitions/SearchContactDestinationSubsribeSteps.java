@@ -94,21 +94,21 @@ public class SearchContactDestinationSubsribeSteps {
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubmit</a>");
     }
     @Given("^topleftIcon is visible$")
-    public void toplefticon_is_visible() throws IOException {
+    public void toplefticon_is_visible() throws Exception {
         Reporter.addStepLog("Top left Icon in the application");
         destination.topLeftIconVisible();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TopleftIcon</a>");
     }
 
     @When("^I click topleftIcon$")
-    public void i_click_toplefticon() throws IOException {
+    public void i_click_toplefticon() throws Exception {
         Reporter.addStepLog("Click Topleft Icon in the application");
         destination.clickIcon();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickIcon</a>");
     }
 
     @When("^I click DestinationMenu item$")
-    public void i_click_destinationmenu_item() throws IOException {
+    public void i_click_destinationmenu_item() throws Exception {
         Reporter.addStepLog("Destination Menu Item is clicked in the application");
         destination.clickDestinationMenu();
         destination.clickMenuItem();
@@ -116,21 +116,21 @@ public class SearchContactDestinationSubsribeSteps {
     }
 
     @When("^I see DestinationSubMenu item$")
-    public void i_see_destinationsubmenu_item() throws IOException {
+    public void i_see_destinationsubmenu_item() throws Exception {
         Reporter.addStepLog("Destination SubMenu Item is visible in the application");
         destination.viewSubMenuItem();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubMenuItem</a>");
     }
 
     @When("^I click DestinationSubMenu item$")
-    public void i_click_destinationsubmenu_item() throws IOException {
+    public void i_click_destinationsubmenu_item() throws Exception {
         Reporter.addStepLog("Destination SubMenu Item is clicked in the application");
         destination.clickSubMenuItem();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSubMenuItem</a>");
     }
 
     @Then("^I see Destination menu$")
-    public void i_see_destination_menu() throws IOException {
+    public void i_see_destination_menu() throws Exception {
         Reporter.addStepLog("Destination Menu in the application");
         destination.verifyMenu();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>VerifyMenu</a>");
@@ -232,7 +232,31 @@ public class SearchContactDestinationSubsribeSteps {
         homePage.validateResults();
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>SearchResults</a>");
     }
+    //Navigate to trivago portal
+    @When("^I click on searchresult (.+)$")
+    public void i_click_on_searchresult(String searchoption) throws Exception {
 
+    }
+
+    @When("^I click see it on trivago$")
+    public void i_click_see_it_on_trivago() throws Exception {
+
+    }
+
+    @Then("^I navigate to details page$")
+    public void i_navigate_to_details_page() throws Exception {
+
+    }
+
+    @Then("^I navigate to trivagoSearch page$")
+    public void i_navigate_to_trivagosearch_page() throws Exception {
+
+    }
+
+    @And("^I see recommendations$")
+    public void i_see_recommendations() throws Exception {
+
+    }
     @After
     public void afterScenario(Scenario scenario) {
         try {

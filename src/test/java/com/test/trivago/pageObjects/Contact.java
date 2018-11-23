@@ -1,13 +1,14 @@
 package com.test.trivago.pageObjects;
 
-import com.test.trivago.listener.Reporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import static com.test.trivago.pageObjects.BaseDriver.*;
+import static com.test.trivago.pageObjects.BaseDriver.scrollintoviewAndClickElement;
+import static com.test.trivago.pageObjects.BaseDriver.scrollintoviewElement;
+import static com.test.trivago.pageObjects.BaseDriver.switchWindow;
 
 
 public class Contact {
@@ -36,15 +37,12 @@ public class Contact {
     }
 
     public void contactVisible() throws Exception {
-        //Contact is visible
-        Thread.sleep(1000);
+        //Click search
         scrollintoviewElement(driver, contact);
-        Reporter.addStepLog("Contact link is visible and clickable in the application");
     }
 
     public void clickContact() throws Exception {
-        //Click contact
-        Thread.sleep(1000);
+        //Click search
         scrollintoviewAndClickElement(driver, contact);
         //Switch to the new window
         switchWindow(driver);
@@ -53,32 +51,25 @@ public class Contact {
     public void enterDataContactDetails(String message,
                                         String fullname,
                                         String mailID) throws Exception {
-        Thread.sleep(1000);
         scrollintoviewElement(driver, contactTextArea);
         //Clear the field
         contactTextArea.clear();
-        //Enter message
+        //Click search
         contactTextArea.sendKeys(message);
         //enter Fullname
-        Thread.sleep(1000);
         scrollintoviewElement(driver, fullName);
         fullName.clear();
         fullName.sendKeys(fullname);
         //enter email
-        Thread.sleep(1000);
         scrollintoviewElement(driver, email);
         email.clear();
         email.sendKeys(mailID);
     }
 
     public void verifyFields() throws Exception {
-        Thread.sleep(1000);
         scrollintoviewElement(driver, contactTextArea);
-        Thread.sleep(1000);
         scrollintoviewElement(driver, fullName);
-        Thread.sleep(1000);
         scrollintoviewElement(driver, email);
-        Thread.sleep(1000);
         scrollintoviewElement(driver, confirm);
         Assert.assertTrue((contactTextArea.isDisplayed() && contactTextArea.isEnabled())
                         && (fullName.isDisplayed() && fullName.isEnabled())
@@ -88,23 +79,19 @@ public class Contact {
     }
 
     public void clickConfirm() throws Exception {
-        //Click confirm
-        Thread.sleep(2000);
+        //Click checkbox
         scrollintoviewAndClickElement(driver, confirm);
     }
 
     public void clickSubmit() throws Exception {
         //Cick on submit button
-        Thread.sleep(2000);
         scrollintoviewAndClickElement(driver, submit);
     }
 
     //Verify message 'Message Sent Successfully! '
     public Boolean verifyMessage(String message) throws Exception {
         JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("window.scrollBy(0,-400)", "");
-        Thread.sleep(2000);
-        explicitWaitClickable(driver,feedBack);
+        executor.executeScript("window.scrollBy(0,-250)", "");
         scrollintoviewElement(driver, feedBack);
         return feedBack.getText().toUpperCase().trim().equals(message.toUpperCase().trim());
     }

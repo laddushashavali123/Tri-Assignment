@@ -31,7 +31,6 @@ public class HomePage {
 
     public void searchEnabled() throws Exception {
         //Click search
-        Thread.sleep(1000);
         explicitWait(driver, search);
         scrollintoviewElement(driver, search);
         Assert.assertTrue(search.isDisplayed()
@@ -40,12 +39,10 @@ public class HomePage {
 
     public void clickSearchIcon() throws Exception {
         //Click search
-        Thread.sleep(1000);
         scrollintoviewAndClickElement(driver,search);
     }
 
     public void enterDataSearch(String data) throws Exception {
-        Thread.sleep(1000);
         scrollintoviewElement(driver, searchData);
         //Clear the field
         searchData.clear();
