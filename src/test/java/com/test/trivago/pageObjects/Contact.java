@@ -1,5 +1,6 @@
 package com.test.trivago.pageObjects;
 
+import com.test.trivago.listener.Reporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -37,12 +38,13 @@ public class Contact {
     }
 
     public void contactVisible() throws Exception {
-        //Click search
+        //Contact is visible
         scrollintoviewElement(driver, contact);
+        Reporter.addStepLog("Contact link is visible and clickable in the application");
     }
 
     public void clickContact() throws Exception {
-        //Click search
+        //Click contact
         scrollintoviewAndClickElement(driver, contact);
         //Switch to the new window
         switchWindow(driver);
@@ -54,7 +56,7 @@ public class Contact {
         scrollintoviewElement(driver, contactTextArea);
         //Clear the field
         contactTextArea.clear();
-        //Click search
+        //Enter message
         contactTextArea.sendKeys(message);
         //enter Fullname
         scrollintoviewElement(driver, fullName);
@@ -79,7 +81,7 @@ public class Contact {
     }
 
     public void clickConfirm() throws Exception {
-        //Click checkbox
+        //Click confirm
         scrollintoviewAndClickElement(driver, confirm);
     }
 

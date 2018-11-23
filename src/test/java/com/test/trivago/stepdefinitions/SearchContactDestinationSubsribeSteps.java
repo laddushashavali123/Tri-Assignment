@@ -34,7 +34,6 @@ public class SearchContactDestinationSubsribeSteps {
         contact = new Contact(driver);
         subscribe = new Subscribe(driver);
         destination = new Destination(driver);
-
         if (!scenario.getName().equals("")) {
             Reporter.assignAuthor("Laddu shashavali");
             Reporter.addScenarioLog("Scenario: " + scenario.getName());
