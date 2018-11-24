@@ -47,52 +47,50 @@ public class Destination {
         PageFactory.initElements(driver, this);
     }
 
-    public void clickIcon() throws Exception{
-            //Click on Icon
-            scrollintoviewAndClickElement(driver, topLeftIcon);
+    public void clickIcon() throws Exception {
+        //Click on Icon
+        scrollintoviewAndClickElement(driver, topLeftIcon);
     }
 
-    public void topLeftIconVisible() throws Exception{
-            scrollintoviewElement(driver, topLeftIcon);
-            Assert.assertTrue((topLeftIcon.isDisplayed() && topLeftIcon.isEnabled()),
-                    "topLeftIcon menu is not visible and not Enabled");
+    public void topLeftIconVisible() throws Exception {
+        scrollintoviewElement(driver, topLeftIcon);
+        Assert.assertTrue((topLeftIcon.isDisplayed() && topLeftIcon.isEnabled()),
+                "topLeftIcon menu is not visible and not Enabled");
 
     }
 
-    public void verifyMenu() throws Exception{
-           if(scroll_Page(destinationMenuItem,1000))
-                Assert.assertTrue((destinationMenuItem.isDisplayed() && destinationMenuItem.isEnabled()),
-                        "Destination menu Item is not visible and not Enabled");
+    public void verifyMenu() throws Exception {
+        scrollintoviewElement(driver, destinationMenuItem);
+        Assert.assertTrue((destinationMenuItem.isDisplayed() && destinationMenuItem.isEnabled()),
+                "Destination menu Item is not visible and not Enabled");
     }
 
-    public void clickDestinationMenu() throws Exception{
+    public void clickDestinationMenu() throws Exception {
         //Click on Destination Menu
-        scrollintoviewAndClickElement(driver,destinationMenuItem);
+        scrollintoviewAndClickElement(driver, destinationMenuItem);
     }
 
-    public void clickMenuItem() throws Exception{
+    public void clickMenuItem() throws Exception {
         //Click on Menu item
-        scrollintoviewAndClickElement(driver,destinationMenuItem);
+        scrollintoviewAndClickElement(driver, destinationMenuItem);
     }
 
-    public void clickSubMenuItem() throws Exception{
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        if(scroll_Page(bestUsCities,1000))
-            executor.executeScript("var elem=arguments[0]; setTimeout(function() {elem.click();}, 100)", bestUsCities);
-
+    public void clickSubMenuItem() throws Exception {
+        //Click Submenu item
+        scrollintoviewAndClickElement(driver, bestUsCities);
     }
 
-    public void viewSubMenuItem() throws Exception{
-        if(scroll_Page(bestUsCities,1000))
-            Assert.assertTrue((bestUsCities.isDisplayed() && bestUsCities.isEnabled()),
-                    "Destination sub menu Item is not visible and not Enabled");
+    public void viewSubMenuItem() throws Exception {
+        scrollintoviewElement(driver, bestUsCities);
+        Assert.assertTrue((bestUsCities.isDisplayed() && bestUsCities.isEnabled()),
+                "Destination sub menu Item is not visible and not Enabled");
 
     }
 
     public void seeResults() throws Exception {
         List<WebElement> titles = driver.findElements(By.xpath("//*[@class='post-main-title title']"));
-        for(int i=0;i<titles.size();i++){
-            WebElement element = driver.findElement(By.xpath("(//*[@class='post-main-title title']/span)["+(i+1)+"]"));
+        for (int i = 0; i < titles.size(); i++) {
+            WebElement element = driver.findElement(By.xpath("(//*[@class='post-main-title title']/span)[" + (i + 1) + "]"));
             JavascriptExecutor executor = (JavascriptExecutor) driver;
             executor.executeScript("arguments[0].scrollIntoView(true);", element);
             Thread.sleep(500);
@@ -105,9 +103,9 @@ public class Destination {
 
     public void validateResults() throws Exception {
         List<WebElement> titles = driver.findElements(By.xpath("//*[@class='post-main-title title']"));
-        for(int i=0;i<titles.size();i++){
-            WebElement element = driver.findElement(By.xpath("(//*[@class='post-main-title title']/span)["+(i+1)+"]"));
-            scrollintoviewElement(driver,element);
+        for (int i = 0; i < titles.size(); i++) {
+            WebElement element = driver.findElement(By.xpath("(//*[@class='post-main-title title']/span)[" + (i + 1) + "]"));
+            scrollintoviewElement(driver, element);
             Thread.sleep(500);
             Assert.assertTrue((element.isDisplayed()),
                     "Destination menu results are not visible");
@@ -117,9 +115,9 @@ public class Destination {
     }
 
     //* Click Result and navigate to trivago page*/
-    public void clickSearchResult(String searchResult) throws Exception{
-        WebElement element=driver.findElement(By.xpath("//span[text()='"+searchResult+"']"));
-        scrollintoviewAndClickElement(driver,element);
+    public void clickSearchResult(String searchResult) throws Exception {
+        WebElement element = driver.findElement(By.xpath("//span[text()='" + searchResult + "']"));
+        scrollintoviewAndClickElement(driver, element);
         Thread.sleep(500);
         Assert.assertTrue((titleDetailsPage.isDisplayed()),
                 "Details page is not visible");
@@ -127,15 +125,14 @@ public class Destination {
                 "Title text is not available in the details page");
     }
 
-    public void clickSeeitOnTrivago() throws Exception{
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        if(scroll_Page(bestUsCities,1000)) {
-            scrollintoviewAndClickElement(driver,seeItTrivago);
-        }
+    public void clickSeeitOnTrivago() throws Exception {
+        //Click on See it On trivago
+        scrollintoviewAndClickElement(driver, seeItTrivago);
+        //Switch to new window
         switchWindow(driver);
     }
 
-    public void detailsPage() throws Exception{
+    public void detailsPage() throws Exception {
         Thread.sleep(500);
         Assert.assertTrue((titleDetailsPage.isDisplayed()),
                 "Details page is not visible");
@@ -143,14 +140,14 @@ public class Destination {
                 "Title text is not available in the details page");
     }
 
-    public void navigateTrivagoSearchPage() throws Exception{
-        List<WebElement> checkinCheckou=driver.findElements(By.xpath("//*[@class='btn-horus__content']//*[@class='btn-horus__type']"));
-      for(WebElement webElement: checkinCheckou) {
-          Assert.assertTrue((webElement.isDisplayed()),
-                  "Date & Time selection Calendar is not visible");
-          Assert.assertNotNull((webElement.getText()),
-                  (webElement.getText())+" is not available in the trivago page");
-      }
+    public void navigateTrivagoSearchPage() throws Exception {
+        List<WebElement> checkinCheckou = driver.findElements(By.xpath("//*[@class='btn-horus__content']//*[@class='btn-horus__type']"));
+        for (WebElement webElement : checkinCheckou) {
+            Assert.assertTrue((webElement.isDisplayed()),
+                    "Date & Time selection Calendar is not visible");
+            Assert.assertNotNull((webElement.getText()),
+                    (webElement.getText()) + " is not available in the trivago page");
+        }
         Assert.assertTrue((headerTrivago.isDisplayed()),
                 "Header Trivago page is not visible");
         Assert.assertNotNull((headerTrivago.getText()),
@@ -171,11 +168,11 @@ public class Destination {
                 "Search Checkout button is not visible");
         Assert.assertNotNull((searchTrivagoCheckout.getText()),
                 "Search Checkout text is not available in the trivago page");
-      // Reporter.addStepLog();
+        // Reporter.addStepLog();
 
     }
 
-    public void verifyRecommendations() throws Exception{
+    public void verifyRecommendations() throws Exception {
 
     }
 }

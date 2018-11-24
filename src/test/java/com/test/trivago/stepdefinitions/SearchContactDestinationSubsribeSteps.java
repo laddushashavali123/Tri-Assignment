@@ -257,8 +257,7 @@ public class SearchContactDestinationSubsribeSteps {
 
     }
     @After
-    public void afterScenario(Scenario scenario) {
-        try {
+    public void afterScenario(Scenario scenario) throws Exception{
             if (scenario.isFailed()) {
                 Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TestFail</a>");
                 byte[] screenshotFail = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
@@ -269,8 +268,6 @@ public class SearchContactDestinationSubsribeSteps {
             }
             //Quit all Instances
             driver.quit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 }
