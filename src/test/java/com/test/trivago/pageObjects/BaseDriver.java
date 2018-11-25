@@ -19,6 +19,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +51,7 @@ public class BaseDriver {
             opt.addArguments("disable-extensions");
             opt.addArguments("--start-maximized");
             DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability (CapabilityType.ACCEPT_SSL_CERTS, true);
+            capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
             capabilities.setCapability(ChromeOptions.CAPABILITY, opt);
             driver = new ChromeDriver(capabilities);
             driver.manage().deleteAllCookies();
@@ -70,10 +72,9 @@ public class BaseDriver {
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-           /* driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);*/
+            /* driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);*/
             return driver;
-        }
-            else
+        } else
             return null;
     }
 
@@ -94,8 +95,7 @@ public class BaseDriver {
         if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("chrome".toUpperCase().trim())) {
             // using testProperties.properties
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
-        }else
-        if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
+        } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
             // using testProperties.properties
             System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\drivers\\geckodriver.exe");
         }
@@ -140,11 +140,42 @@ public class BaseDriver {
         return webElement;
     }
 
+    public static void clickTab(WebDriver driver, WebElement element) {
+        Actions action = new Actions(driver);
+        action.contextClick(element)
+            .sendKeys(Keys.TAB).build()
+                .perform();
+    }
+
     //Scroll into view
     public static void scrollintoviewElement(WebDriver webdriver, WebElement webElement) throws Exception {
         ((JavascriptExecutor) webdriver).executeScript("arguments[0].scrollIntoView(true);", webElement);
         Thread.sleep(500);
         hightlightElement(webdriver, webElement);
+    }
+
+    public static List<String> getBoundedRectangleOfElement(WebElement we) throws Exception {
+        JavascriptExecutor je = (JavascriptExecutor) driver;
+        List<String> bounds = (ArrayList<String>) je.executeScript(
+                "var rect = arguments[0].getBoundingClientRect();" +
+                        "return [ '' + parseInt(rect.left), '' + parseInt(rect.top), '' + parseInt(rect.width), '' + parseInt(rect.height) ]", we);
+        System.out.println("top: " + bounds.get(1));
+        return bounds;
+    }
+
+    public void scrollToElementAndCenterVertically(WebElement we) {
+      /*  List<String> bounds = getBoundedRectangleOfElement(we);
+        Long totalInnerPageHeight = getViewPortHeight(driver);
+        JavascriptExecutor je = (JavascriptExecutor) driver;
+        je.executeScript("window.scrollTo(0, " + (Integer.parseInt(bounds.get(1)) - (totalInnerPageHeight/2)) + ");");
+        je.executeScript("arguments[0].style.outline = \"thick solid #0000FF\";", we);*/
+    }
+
+    public static void mouseHoverJScript(WebDriver driver, WebElement HoverElement) throws Exception {
+        String mouseOverScript = "if(document.createEvent){var evObj = document.createEvent('MouseEvents');evObj.initEvent('mouseover', true, false); arguments[0].dispatchEvent(evObj);} else if(document.createEventObject) { arguments[0].fireEvent('onmouseover');}";
+        ((JavascriptExecutor) driver).executeScript(mouseOverScript, HoverElement);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", HoverElement);
+        hightlightElement(driver, HoverElement);
     }
 
     //Scroll into view
@@ -155,8 +186,9 @@ public class BaseDriver {
         hightlightElement(webdriver, webElement);
         //Click on Element
         ((JavascriptExecutor) webdriver).executeScript("arguments[0].click();", webElement);
-        implicitWait(driver);
+        implicitWait(webdriver);
     }
+
     //Highlight element
     public static void hightlightElement(WebDriver webdriver, WebElement webElement) throws InterruptedException {
         // draw a border around the found element
@@ -188,35 +220,96 @@ public class BaseDriver {
         }
         return path;
     }
-    public static boolean scroll_Page(WebElement webelement, int scrollPoints)
-    {
-        try
-        {
+
+    public static boolean scroll_Page(WebElement webelement, int scrollPoints) {
+        try {
             Actions dragger = new Actions(driver);
             // drag downwards
             int numberOfPixelsToDragTheScrollbarDown = 10;
-            for (int i = 10; i < scrollPoints; i = i + numberOfPixelsToDragTheScrollbarDown)
-            {
+            for (int i = 10; i < scrollPoints; i = i + numberOfPixelsToDragTheScrollbarDown) {
                 dragger.moveToElement(webelement).clickAndHold().moveByOffset(0, numberOfPixelsToDragTheScrollbarDown).release(webelement).build().perform();
             }
             Thread.sleep(500);
             return true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public static void switchWindow(WebDriver driver){
+    public static void switchWindow(WebDriver driver) {
         //Switch to new window
-        Set<String> handles= driver.getWindowHandles();
+        Set<String> handles = driver.getWindowHandles();
         System.out.println(handles);
         // Pass a window handle to the other window
         for (String handle : driver.getWindowHandles()) {
             System.out.println(handle);
             driver.switchTo().window(handle);
         }
+    }
+
+    public static boolean switchWindow(WebDriver driver, String title) throws Exception {
+
+        String currentWindow = driver.getWindowHandle();
+        Set<String> availableWindows = driver.getWindowHandles();
+        if (!availableWindows.isEmpty()) {
+            for (String windowId : availableWindows) {
+                if (driver.switchTo().window(windowId).getTitle().equals(title)) {
+                    return true;
+                } else {
+                    driver.switchTo().window(currentWindow);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    //Element is present
+    public static boolean isElementPresent(WebElement element) {
+        try {
+            return element.isDisplayed();
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    //Scroll to Top of the page
+    public static boolean scrollUpElement(WebDriver driver, WebElement element) throws Exception {
+        boolean flag = false;
+        for (int second = 0; ; second++) {
+            if (second >= 5) {
+                break;
+            }
+            if (!isElementPresent(element))
+                ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-400)", "");
+            else {
+                flag = true;
+            }
+            Thread.sleep(2000);
+        }
+        return flag;
+    }
+
+    //Scroll to Down of the page
+    public static boolean scrollDownElement(WebDriver driver, WebElement element) throws Exception {
+        boolean flag = false;
+        for (int second = 0; ; second++) {
+            if (second >= 5) {
+                break;
+            }
+            if (!isElementPresent(element))
+                ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,100)", "");
+            else {
+                flag = true;
+            }
+            Thread.sleep(2000);
+        }
+        return flag;
+    }
+
+    public static void clickKey(Keys keys) {
+        Actions action = new Actions(driver);
+        action.sendKeys(keys).build().perform();
     }
 }

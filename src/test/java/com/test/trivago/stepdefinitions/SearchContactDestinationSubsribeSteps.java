@@ -234,27 +234,37 @@ public class SearchContactDestinationSubsribeSteps {
     //Navigate to trivago portal
     @When("^I click on searchresult (.+)$")
     public void i_click_on_searchresult(String searchoption) throws Exception {
-
+        //Click searchResultoption
+        destination.clickSearchResult(searchoption);
+        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSearchResult</a>");
     }
 
     @When("^I click see it on trivago$")
     public void i_click_see_it_on_trivago() throws Exception {
+       //Click seeItOnTrivago link
+        destination.clickSeeitOnTrivago();
+        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>ClickSeeitonTrivago</a>");
 
     }
 
     @Then("^I navigate to details page$")
     public void i_navigate_to_details_page() throws Exception {
+       //Navigate to details page
+        destination.detailsPage();
+        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>DetailsPage</a>");
 
     }
 
     @Then("^I navigate to trivagoSearch page$")
     public void i_navigate_to_trivagosearch_page() throws Exception {
-
+         //Navigate to trivago search page
+        destination.navigateTrivagoSearchPage();
     }
 
     @And("^I see recommendations$")
     public void i_see_recommendations() throws Exception {
-
+        //Verify the recommendations
+        destination.verifyRecommendations();
     }
     @After
     public void afterScenario(Scenario scenario) throws Exception{
