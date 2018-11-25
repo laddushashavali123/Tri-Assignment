@@ -226,8 +226,8 @@ public class Destination {
             WebElement resultWrapper = driver.findElement(By.xpath("(//*[@class='pos-relative item__wrapper'])[" + (i + 1) + "]"));
             scrollintoviewElement(driver, resultWrapper);
             //Verify Image
-            Thread.sleep(2000);
-            /*String imgData = *//*"//*[@class='item__image-wrapper pos-relative']//*[@class='lazy-image__image-wrapper']"*//*"//*[@class='lazy-image__image item__image item__image--has-gallery']";
+           /* Thread.sleep(2000);
+            String imgData = "//*[@class='lazy-image__image item__image item__image--has-gallery']";
             WebElement imgDetails = resultWrapper.findElement(By.xpath(imgData));
             Assert.assertNotNull(imgDetails.getAttribute("src"));*/
             String lstResultID=driver.findElement(By.xpath(Name)).getAttribute("id");
