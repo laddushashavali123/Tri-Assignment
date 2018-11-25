@@ -18,7 +18,6 @@ import static com.test.trivago.pageObjects.BaseDriver.*;
 
 public class HomepageTrivago {
     private WebDriver driver;
-    private List<WebElement> lstPages = new ArrayList<>();
     //Locators
     @FindBy(how = How.XPATH, using = "//*[text()='trivago']")
     public WebElement trivagoLink;
@@ -34,8 +33,6 @@ public class HomepageTrivago {
     public WebElement searchTrivagoCheckout;
     @FindBy(how = How.XPATH, using = "//*[@class='icon-ic btn-horus__icon btn-horus__icon--checkin icon-center']")
     public WebElement searchTrivagoCheckin;
-    @FindBy(how = How.XPATH, using = "//*[@class='pagination__pages']//*[@class='btn btn--pagination btn--small pagination__page pagination__page--first-cluster']")
-    public WebElement pages;
 
     //Constructor
     public HomepageTrivago(WebDriver driver) {
@@ -46,27 +43,19 @@ public class HomepageTrivago {
 
     public void trivagoVisible() throws Exception {
         //Contact is visible
-        Thread.sleep(1000);
         scrollintoviewElement(driver, trivagoLink);
         Reporter.addStepLog("Contact link is visible and clickable in the application");
     }
 
     public void clickTrivago() throws Exception {
-        //Click Trivago
-        Thread.sleep(1000);
-        scrollintoviewElement(driver, trivagoLink);
-        driver.navigate().to(trivagoLink.getAttribute("href").trim());
-        implicitWait(driver);
+        //Click contact
+        scrollintoviewAndClickElement(driver, trivagoLink);
         //Switch to the new window
         switchWindow(driver);
     }
 
     public void verifyFields() throws Exception {
-        Thread.sleep(2000);
-        retryingFindWebElement(driver, dataField);
         scrollintoviewElement(driver, dataField);
-        Thread.sleep(3000);
-        retryingFindWebElement(driver, submit);
         scrollintoviewElement(driver, submit);
 
         Assert.assertTrue((dataField.isDisplayed() && dataField.isEnabled())
@@ -75,7 +64,6 @@ public class HomepageTrivago {
     }
 
     public void enterData(String data) throws Exception {
-        Thread.sleep(1000);
         scrollintoviewElement(driver, dataField);
         //Clear the field
         dataField.clear();
@@ -85,7 +73,6 @@ public class HomepageTrivago {
 
     public void clickSearch() throws Exception {
         //Click confirm
-        Thread.sleep(1000);
         scrollintoviewAndClickElement(driver, submit);
     }
 
@@ -93,15 +80,15 @@ public class HomepageTrivago {
         // Switched to page
         String titleTrivago = driver.getTitle();
         Reporter.addStepLog("Moved to page with title: " + titleTrivago);
-        Thread.sleep(1000);
         switchWindow(driver, titleTrivago);
         Assert.assertNotNull((titleTrivago),
                 "Header Trivago text is not Visible in the trivago page");
         Thread.sleep(1000);
+
         ((JavascriptExecutor) driver)
                 .executeScript("window.onafterunload = function(e){};");
         Thread.sleep(2000);
-        WebElement clickClose = null;
+        WebElement clickClose=null;
         List<WebElement> checkinCheckou = driver.findElements(By.xpath("//*[@class='btn-horus__content']//*[@class='btn-horus__type']"));
         for (int i = 0; i < checkinCheckou.size(); i++) {
             WebElement webElement = driver.findElement(By.xpath("(//*[@class='btn-horus__content']//*[@class='btn-horus__type'])[" + (i + 1) + "]"));
@@ -109,14 +96,15 @@ public class HomepageTrivago {
                     "Date & Time selection Calendar is not visible");
             Assert.assertNotNull((webElement.getText()),
                     (webElement.getText()) + " is not available in the trivago page");
-            if (isElementPresent(webElement)) {
+           /* if (isElementPresent(webElement)) {
                 Thread.sleep(2000);
                 webElement.click();
-                clickClose = webElement;
-            }
+                clickClose=webElement;
+            }*/
             Reporter.addStepLog(webElement.getText() + " is available in the trivago page");
         }
-        clickClose.click();
+
+        //clickClose.click();
         Thread.sleep(1000);
         WebElement srchText = driver.findElement(By.xpath("//*[@class='input horus__querytext']"));
         scrollintoviewElement(driver, srchText);
@@ -144,37 +132,22 @@ public class HomepageTrivago {
                 "Search Checkout text is not available in the trivago page");
         Reporter.addStepLog("Search Checkout text is available in the trivago page");
         Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TrivagoResults</a>");
-        //Pagination Logics
-        scrollintoviewElement(driver, pages);
-        lstPages = driver.findElements(By.xpath("//*[contains(@class,'btn btn--pagination btn--small pagination__page')]"));
-        Reporter.addStepLog("Search results are available in '" + lstPages.size() + "' pages in the trivago search page");
-        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TrivagoResultsPages</a>");
-        // pagination_check(lstPages);
     }
 
     public void verifyRecommendations() throws Exception {
-        // Verify Results in First page
-        Reporter.addStepLog("Focusing Page - '1'  results");
-        viewRecommendationsPage();
-
-        //Verify Results in other pages starting from page-2
-        pagination_check_verifyResults(driver, lstPages);
-
-    }
-
-    private void viewRecommendationsPage() throws Exception {
         //Invivbility of Guest ratings element
         implicitWait(driver);
         Thread.sleep(3000);
+
         List<WebElement> searchResultSet = driver.findElements(By.xpath("//*[@class='pos-relative item__wrapper']"));
-        Reporter.addStepLog("'" + searchResultSet.size() + "' Search Results are displayed in the trivago page");
+        Reporter.addStepLog("'"+searchResultSet.size()+"' Search Results are displayed in the trivago page");
         for (int i = 0; i < searchResultSet.size(); i++) {
-            String Name = "//*[@class='hotel-item item-order__list-item js_co_item']";
+            String Name="//*[@class='hotel-item item-order__list-item js_co_item']";
             WebElement resultWrapper = driver.findElement(By.xpath("(//*[@class='pos-relative item__wrapper'])[" + (i + 1) + "]"));
             scrollintoviewElement(driver, resultWrapper);
             //Verify Image
-            String lstResultID = driver.findElement(By.xpath(Name)).getAttribute("id");
-            Reporter.addStepLog("****  List Item: " + lstResultID + " ****");
+            String lstResultID=driver.findElement(By.xpath(Name)).getAttribute("id");
+            Reporter.addStepLog("****  List Item: " + lstResultID+" ****");
             Reporter.addStepLog("Image Gallery: " + lstResultID);
             //Verify Result details
             WebElement resultItemdetails = resultWrapper.findElement(By.xpath("//*[@class='item__flex-column']//*[@class='item__details']"));
@@ -198,15 +171,12 @@ public class HomepageTrivago {
             //List of deals
             WebElement dealAlternative = resultItemSectionDeal.findElement(By.xpath("//*[@class='deal-other__top-alternatives']"));
             List<WebElement> dealsList = dealAlternative.findElements(By.xpath("//*[@class='deal-other__offer js_co_deal']"));
-            List<String> lstDeals = new ArrayList<String>();
-            if (dealsList.size() > 0) {
-                for (int j = 0; j < dealsList.size(); j++) {
-                    WebElement dealName = dealAlternative.findElement(By.xpath("(//*[@class='deal-other__offer js_co_deal'])[" + (j + 1) + "]"));
-                    Assert.assertNotNull(dealName.getText());
-                    lstDeals.add(dealName.getText());
-                }
-                Reporter.addStepLog("Deals : " + lstDeals);
+            List<String> lstDeals=new ArrayList<String>();
+            for (int j = 0; j < dealsList.size(); j++) {
+                WebElement dealName = dealAlternative.findElement(By.xpath("(//*[@class='deal-other__offer js_co_deal'])[" + (j + 1) + "]"));
+                Assert.assertNotNull(dealName.getText());lstDeals.add(dealName.getText());
             }
+            Reporter.addStepLog("Deals : " + lstDeals);
 
             //More Deals
             WebElement slideMoreDeals = resultItemSectionDeal.findElement(By.xpath("//*[@class='deal-other__more item__slideout-toggle']"));
@@ -226,38 +196,8 @@ public class HomepageTrivago {
             WebElement dealWrapper = resultItemSectionBestDeal.findElement(By.xpath("//*[@class='deal__wrapper']"));
             Assert.assertNotNull(dealWrapper.getText());
             Reporter.addStepLog("Strike wrapper: " + dealWrapper.getText());
-            Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>" + lstResultID + "</a>");
-        }
-    }
 
-    private void pagination_check_verifyResults(WebDriver driver, List<WebElement> pagination) throws Exception {
-        String page = "//*[contains(@class,'btn btn--pagination btn--small pagination__page')]";
-        implicitWait(driver);    //wait until 'loader'  loading
-        Thread.sleep(5000);
-        int page_numbers = pagination.size();
-        if (pagination.size() > 0) {
-            System.out.println("pagination exists and size => '" + page_numbers + "'");
-            for (int i = 2; i <= page_numbers; i++) {
-                //Verify Results
-                Reporter.addStepLog("Focusing Page-'" + (i-1) + "' results");
-                String xpathPageNo = "("+page+")[" + i + "]";
-                if (isElementPresentEnabled(driver, xpathPageNo)) {
-                    JavascriptExecutor js = (JavascriptExecutor) driver;
-                    js.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.xpath(xpathPageNo)));
-                    //for  scroller move
-                    js.executeScript("arguments[0].click();", driver.findElement(By.xpath(xpathPageNo)));
-                    implicitWait(driver);      //wait
-                    //Verify Results
-                    Reporter.addStepLog("Results of Page: " + i);
-                    viewRecommendationsPage();
-                } else {
-                    //Verify Results
-                    Reporter.addStepLog("Results of Page: " + i);
-                    viewRecommendationsPage();
-                }
-            }
-        } else {
-            System.out.println("no pagination");
+            Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>"+lstResultID+"</a>");
         }
     }
 }

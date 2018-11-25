@@ -23,6 +23,7 @@ public class SearchContactDestinationSubsribeSteps {
     private Subscribe subscribe;
     private Contact contact;
     private Destination destination;
+    private HomepageTrivago homepageTrivago;
 
     @Before
     public void beforeScenario(Scenario scenario) {
@@ -34,6 +35,7 @@ public class SearchContactDestinationSubsribeSteps {
         contact = new Contact(driver);
         subscribe = new Subscribe(driver);
         destination = new Destination(driver);
+        homepageTrivago=new HomepageTrivago(driver);
         if (!scenario.getName().equals("")) {
             Reporter.assignAuthor("Laddu shashavali");
             Reporter.addScenarioLog("Scenario: " + scenario.getName());
@@ -266,6 +268,51 @@ public class SearchContactDestinationSubsribeSteps {
         //Verify the recommendations
         destination.verifyRecommendations();
     }
+   //Navigate Trivago page
+
+    @Given("^Trivago is visible$")
+    public void trivago_is_visible() throws Exception {
+        Reporter.addStepLog("Trivago link is visible in the application");
+        homepageTrivago.trivagoVisible();
+        Reporter.addStepLog("<a href='" + captureScreen(driver) + "'>TrivagoLink</a>");
+    }
+
+    @When("^I click Trivago$")
+    public void i_click_trivago() throws Exception {
+        Reporter.addStepLog("Click Trivago link in the application");
+        homepageTrivago.clickTrivago();
+    }
+
+    @When("^I enter (.+) data in searchPage$")
+    public void i_enter_data_in_searchpage(String datasearch) throws Exception {
+        Reporter.addStepLog("Enter data in the application");
+        homepageTrivago.enterData(datasearch);
+    }
+
+    @Then("^I see the appropriate fields in Trivago searchPage$")
+    public void i_see_the_appropriate_fields_in_trivago_searchpage() throws Exception {
+        Reporter.addStepLog("Verify fields in the application");
+        homepageTrivago.verifyFields();
+    }
+
+    @Then("^I see the searchResults in Trivago$")
+    public void i_see_the_searchresults_in_trivago() throws Exception {
+        Reporter.addStepLog("Search results is visible in the application");
+        homepageTrivago.navigateTrivagoSearchPage();
+    }
+
+    @And("^I click Search button in searchPage$")
+    public void i_click_search_button_in_searchpage() throws Exception {
+        Reporter.addStepLog("Click search button in the application");
+        homepageTrivago.clickSearch();
+    }
+
+    @And("^I verify the searchResults in trivago$")
+    public void i_verifysearchResults_searchpage() throws Exception {
+        Reporter.addStepLog("Validate search results in the application");
+        homepageTrivago.verifyRecommendations();
+    }
+
     @After
     public void afterScenario(Scenario scenario) throws Exception{
             if (scenario.isFailed()) {

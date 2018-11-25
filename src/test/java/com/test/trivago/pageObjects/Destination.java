@@ -219,6 +219,7 @@ public class Destination {
         //Invivbility of Guest ratings element
         implicitWait(driver);
         Thread.sleep(3000);
+
         List<WebElement> searchResultSet = driver.findElements(By.xpath("//*[@class='pos-relative item__wrapper']"));
         Reporter.addStepLog("'"+searchResultSet.size()+"' Search Results are displayed in the trivago page");
         for (int i = 0; i < searchResultSet.size(); i++) {
@@ -226,10 +227,6 @@ public class Destination {
             WebElement resultWrapper = driver.findElement(By.xpath("(//*[@class='pos-relative item__wrapper'])[" + (i + 1) + "]"));
             scrollintoviewElement(driver, resultWrapper);
             //Verify Image
-           /* Thread.sleep(2000);
-            String imgData = "//*[@class='lazy-image__image item__image item__image--has-gallery']";
-            WebElement imgDetails = resultWrapper.findElement(By.xpath(imgData));
-            Assert.assertNotNull(imgDetails.getAttribute("src"));*/
             String lstResultID=driver.findElement(By.xpath(Name)).getAttribute("id");
             Reporter.addStepLog("****  List Item: " + lstResultID+" ****");
             Reporter.addStepLog("Image Gallery: " + lstResultID);
