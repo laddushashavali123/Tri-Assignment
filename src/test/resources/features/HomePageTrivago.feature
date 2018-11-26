@@ -13,7 +13,7 @@ Feature: Navigate to Trivago page from Homepage Feature
 
   Examples:
  | dataSearch |
- | Monterey |
+ | usak Province |
 
 
 
