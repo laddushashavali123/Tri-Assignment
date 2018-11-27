@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extentreports>
+    <configuration>
+        <encoding>UTF-8</encoding>
+        <documentTitle>SDET - TASK I</documentTitle>
+        <reportName>SDET_TASK_REPORTS</reportName>
+        <reportHeadline> - v1.0.0</reportHeadline>
+    </configuration>
+</extentreports>
