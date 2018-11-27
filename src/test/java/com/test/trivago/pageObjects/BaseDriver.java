@@ -312,4 +312,23 @@ public class BaseDriver {
         Actions action = new Actions(driver);
         action.sendKeys(keys).build().perform();
     }
+
+    public void pagination_check() throws InterruptedException{
+        implicitWait(driver);    //wait until 'loader'  loading
+        List<WebElement> pagination =driver.findElements(By.xpath("//page-navigation/div/div/span/a"));
+        Thread.sleep(5000);
+        if(pagination.size()>0){
+            System.out.println("pagination exists and size=>"+pagination.size());
+            int page_no=pagination.size();
+            for(int i=2; i <= pagination.size(); i++){
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                js.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.xpath("//page-navigation/div/div/span")));
+                //for  scroller move
+                js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//page-navigation/div/div/span/a["+i+"]")));
+                implicitWait(driver);      //wait
+            }
+        } else {
+            System.out.println("no pagination");
+        }
+    }
 }
