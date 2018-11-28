@@ -62,7 +62,7 @@ public class HomepageTrivago {
     }
 
     public void verifyFields() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         retryingFindWebElement(driver, dataField);
         scrollintoviewElement(driver, dataField);
         Thread.sleep(3000);

@@ -89,6 +89,12 @@ public class BaseDriver {
      * Browser properties initialization
      */
     private static void initProperties() {
+        /*WebDriverManager.chromedriver().setup();
+        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.operadriver().setup();
+        WebDriverManager.phantomjs().setup();
+        WebDriverManager.edgedriver().setup();
+        WebDriverManager.iedriver().setup();*/
         try {
             props.load(new FileReader(PROPERTIES));
         } catch (IOException ex) {
@@ -96,9 +102,13 @@ public class BaseDriver {
         }
         if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("chrome".toUpperCase().trim())) {
             // using testProperties.properties
+
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
         } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
+
             // using testProperties.properties
+            webdrivermanager.setup();
+
             System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\drivers\\geckodriver.exe");
         }
     }
