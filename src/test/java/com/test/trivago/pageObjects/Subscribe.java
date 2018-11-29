@@ -9,6 +9,7 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import static com.test.trivago.pageObjects.BaseDriver.fluientWaitforElement;
 import static com.test.trivago.pageObjects.BaseDriver.scrollintoviewAndClickElement;
 import static com.test.trivago.pageObjects.BaseDriver.scrollintoviewElement;
 
@@ -35,6 +36,7 @@ public class Subscribe {
     }
 
     public void fieldsVisible() throws Exception {
+        Thread.sleep(2000);
         scrollintoviewElement(driver, confirm);
         scrollintoviewElement(driver, email);
         Assert.assertTrue((confirm.isDisplayed() && confirm.isEnabled())
@@ -57,6 +59,7 @@ public class Subscribe {
     //Click submit
     public void clickSubmit() throws Exception {
         //Cick submit
+        fluientWaitforElement(driver, submit);
         scrollintoviewAndClickElement(driver, submit);
     }
 

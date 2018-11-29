@@ -1,13 +1,18 @@
 package com.test.trivago.pageObjects;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -45,7 +50,8 @@ public class BaseDriver {
 
     //open the browser
     public static WebDriver getwebdriver(String browserprop) {
-        WebDriver driver;
+        WebDriver driver = null;
+
         if (browserprop.toUpperCase().trim().equals("CHROME")) {
             ChromeOptions opt = new ChromeOptions();
             opt.addArguments("disable-extensions");
@@ -57,7 +63,6 @@ public class BaseDriver {
             driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
             driver.manage().timeouts().pageLoadTimeout(1000, TimeUnit.SECONDS);
-            return driver;
         } else if (browserprop.toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
             DesiredCapabilities capabilities = DesiredCapabilities.firefox();
             FirefoxProfile profile = new FirefoxProfile();
@@ -66,16 +71,41 @@ public class BaseDriver {
             FirefoxOptions options = new FirefoxOptions();
             options.addPreference("--log", "error");
             capabilities.setCapability("moz:firefoxOptions", options);
-            // capabilities.setCapability("marionette", true);
             capabilities.setCapability(FirefoxDriver.PROFILE, profile);
             driver = new FirefoxDriver(capabilities);
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
+            driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            /* driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);*/
-            return driver;
-        } else
-            return null;
+
+        } else if (browserprop.toUpperCase().trim().equals("ie".toUpperCase().trim())) {
+            DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+            capabilities.setCapability("requireWindowFocus", true);
+            capabilities.setCapability("ignoreProtectedModeSettings", true);
+            capabilities.setCapability("forceCreateProcessApi", true);
+            capabilities.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
+            capabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
+            capabilities.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, false);
+            capabilities.setCapability("ie.ensureCleanSession", true);
+            capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+            capabilities.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
+            driver = new InternetExplorerDriver(capabilities);
+
+        } else if (browserprop.toUpperCase().trim().equals("edge".toUpperCase().trim())) {
+            DesiredCapabilities capabilities = DesiredCapabilities.edge();
+            capabilities.setBrowserName(DesiredCapabilities.edge().getBrowserName());
+            driver = new EdgeDriver(capabilities);
+
+        } else if (browserprop.toUpperCase().trim().equals("phantom".toUpperCase().trim())) {
+            Capabilities caps = new DesiredCapabilities();
+            ((DesiredCapabilities) caps).setJavascriptEnabled(true);
+            ((DesiredCapabilities) caps).setCapability("takesScreenshot", true);
+            driver = new PhantomJSDriver();
+            ;
+        } else {
+            driver = new HtmlUnitDriver();
+        }
+        return driver;
     }
 
     //get the Properties
@@ -94,10 +124,23 @@ public class BaseDriver {
         }
         if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("chrome".toUpperCase().trim())) {
             // using testProperties.properties
-            System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
+            WebDriverManager.chromedriver().setup();
+            // System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
         } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("firefox".toUpperCase().trim())) {
             // using testProperties.properties
-            System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\drivers\\geckodriver.exe");
+            WebDriverManager.firefoxdriver().setup();
+        } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("opera".toUpperCase().trim())) {
+            // using testProperties.properties
+            WebDriverManager.operadriver().setup();
+        } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("phantom".toUpperCase().trim())) {
+            // using testProperties.properties
+            WebDriverManager.phantomjs().setup();
+        } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("edge".toUpperCase().trim())) {
+            // using testProperties.properties
+            WebDriverManager.edgedriver().setup();
+        } else if (props.getProperty(BROWSER_PROP).toUpperCase().trim().equals("ie".toUpperCase().trim())) {
+            // using testProperties.properties
+            WebDriverManager.iedriver().setup();
         }
     }
 
@@ -111,11 +154,24 @@ public class BaseDriver {
     }
 
     //Fluentwait
-    public static void fluentWait(WebDriver webDriver, WebElement webElement) {
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
-                .withTimeout(10, SECONDS)
-                .pollingEvery(5, SECONDS)
-                .ignoring(Exception.class);
+    public static WebElement fluentWait(WebDriver webDriver, WebElement element) {
+        FluentWait<WebDriver> fWait = new FluentWait<>(driver).withTimeout(20, TimeUnit.SECONDS)
+                .pollingEvery(2, TimeUnit.SECONDS)
+                .ignoring(NoSuchElementException.class, TimeoutException.class).ignoring(StaleElementReferenceException.class);
+
+        for (int i = 0; i < 2; i++) {
+            try {
+                //fWait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id='reportmanager-wrapper']/div[1]/div[2]/ul/li/span[3]/i[@data-original--title='We are processing through trillions of data events, this insight may take more than 15 minutes to complete.']")));
+                fWait.until(ExpectedConditions.visibilityOf(element));
+                fWait.until(ExpectedConditions.elementToBeClickable(element));
+            } catch (Exception e) {
+                System.out.println("Element Not found trying again - " + element.toString().substring(70));
+                e.printStackTrace();
+
+            }
+        }
+
+        return element;
 
     }
 
@@ -143,7 +199,7 @@ public class BaseDriver {
     public static void clickTab(WebDriver driver, WebElement element) {
         Actions action = new Actions(driver);
         action.contextClick(element)
-            .sendKeys(Keys.TAB).build()
+                .sendKeys(Keys.TAB).build()
                 .perform();
     }
 
@@ -313,22 +369,36 @@ public class BaseDriver {
         action.sendKeys(keys).build().perform();
     }
 
-    public void pagination_check() throws InterruptedException{
+    public void pagination_check() throws InterruptedException {
         implicitWait(driver);    //wait until 'loader'  loading
-        List<WebElement> pagination =driver.findElements(By.xpath("//page-navigation/div/div/span/a"));
+        List<WebElement> pagination = driver.findElements(By.xpath("//page-navigation/div/div/span/a"));
         Thread.sleep(5000);
-        if(pagination.size()>0){
-            System.out.println("pagination exists and size=>"+pagination.size());
-            int page_no=pagination.size();
-            for(int i=2; i <= pagination.size(); i++){
+        if (pagination.size() > 0) {
+            System.out.println("pagination exists and size=>" + pagination.size());
+            int page_no = pagination.size();
+            for (int i = 2; i <= pagination.size(); i++) {
                 JavascriptExecutor js = (JavascriptExecutor) driver;
                 js.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.xpath("//page-navigation/div/div/span")));
                 //for  scroller move
-                js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//page-navigation/div/div/span/a["+i+"]")));
+                js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//page-navigation/div/div/span/a[" + i + "]")));
                 implicitWait(driver);      //wait
             }
         } else {
             System.out.println("no pagination");
         }
+    }
+
+    public static WebElement fluientWaitforElement(WebDriver driver, WebElement element) throws Exception{
+
+        FluentWait<WebDriver> fWait = new FluentWait<>(driver).withTimeout(20, TimeUnit.SECONDS)
+                .pollingEvery(2, TimeUnit.SECONDS)
+                .ignoring(NoSuchElementException.class, TimeoutException.class).ignoring(StaleElementReferenceException.class);
+
+        for (int i = 0; i < 2; i++) {
+            fWait.until(ExpectedConditions.visibilityOf(element));
+            fWait.until(ExpectedConditions.elementToBeClickable(element));
+            System.out.println("Element Not found trying again - " + element.toString().substring(70));
+        }
+        return element;
     }
 }

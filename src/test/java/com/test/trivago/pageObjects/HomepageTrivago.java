@@ -55,7 +55,9 @@ public class HomepageTrivago {
     }
 
     public void verifyFields() throws Exception {
+        fluientWaitforElement(driver,dataField);
         scrollintoviewElement(driver, dataField);
+        fluientWaitforElement(driver,submit);
         scrollintoviewElement(driver, submit);
 
         Assert.assertTrue((dataField.isDisplayed() && dataField.isEnabled())
@@ -73,6 +75,7 @@ public class HomepageTrivago {
 
     public void clickSearch() throws Exception {
         //Click confirm
+        fluientWaitforElement(driver,submit);
         scrollintoviewAndClickElement(driver, submit);
     }
 

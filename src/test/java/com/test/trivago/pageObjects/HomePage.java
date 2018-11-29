@@ -31,6 +31,7 @@ public class HomePage {
 
     public void searchEnabled() throws Exception {
         //Click search
+        fluientWaitforElement(driver,search);
         explicitWait(driver, search);
         scrollintoviewElement(driver, search);
         Assert.assertTrue(search.isDisplayed()
@@ -39,6 +40,7 @@ public class HomePage {
 
     public void clickSearchIcon() throws Exception {
         //Click search
+        fluientWaitforElement(driver,search);
         scrollintoviewAndClickElement(driver,search);
     }
 
